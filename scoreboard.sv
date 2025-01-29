@@ -24,8 +24,21 @@ class scoreboard;
                 $display("Niepoprawnie przeprowadzono reset");
               break;
             end
-          
-          if (trans.alu_result !== expected_alu_result(trans)) begin
+
+          if(trans.data_memory_read_enable)begin
+            if(trans.o_alu_argument == trans.data_memory)
+              $display("[SCOREBOARD] Poprawnie odczytano zawartosc pamieci danych");
+            else
+              $display("[SCOREBOARD] Nie poprawnie odczytano zawartosc pamieci danych");
+            end
+          else begin
+             if(trans.o_alu_argument == trans.register_file_output)
+               $display("[SCOREBOARD] Poprawnie odczytano zawartosc rejestru danych");
+            else
+              $display("[SCOREBOARD] Nie poprawnie odczytano zawartosc rejestru danych");
+          end
+
+          if (trans.alu_result != expected_alu_result(trans)) begin
             $display("[SCOREBOARD] Blad! Oczekiwano %h, otrzymano %h, acu: %h, arg: %h, op: %h", expected_alu_result(trans), trans.alu_result, trans.acu_output, trans.o_alu_argument, trans.opcode);
             end else begin
               $display("[SCOREBOARD] OK! Otrzymano poprawny wynik: %h, acu: %h, arg: %h, op: %h", trans.alu_result, trans.acu_output, trans.o_alu_argument, trans.opcode);
