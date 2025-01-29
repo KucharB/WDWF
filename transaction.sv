@@ -14,13 +14,14 @@ class transaction;
     bit [7:0] register_file_output;
     bit c_out;
   	bit [7:0] o_alu_argument;
-  
+  bit [7:0] previous_acu; 
   	bit reset;
 
-  constraint c_reg_file_ce {
+  constraint c_enables {
    reg_file_ce == 3'b000;
-    
-    //acumulator_ce dist {1 := 80, 0 := 20};
+    direct_load dist {1 := 10, 0 := 90};
+    data_memory_read_enable dist {1 := 10, 0 := 90};
+    acumulator_ce dist {1 := 80, 0 := 20};
   }
   constraint c_diretct_load {
     if(direct_load) data_memory_read_enable == 0;

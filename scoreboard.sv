@@ -1,3 +1,5 @@
+//`include "transaction.sv"
+
 class scoreboard;
 	
     mailbox mon_dut;
@@ -30,7 +32,29 @@ class scoreboard;
             end
         end
     endtask
-  
+   task acu_scb;
+        transaction trans;
+        forever begin
+            mon_dut.get(trans);
+            trans_cnt++;
+          if(!trans.data_memory_read_enable && trans.acumulator_ce && !trans.direct_load) begin
+          if (trans.acu_output == trans.alu_result) begin
+              $display("[SCOREBOARD_AKU] OK! Poprawnie wpisano wartosc do akumulatora, acu: %h, alu_res odczytane takt zegara wczesniej: %h",
+                         trans.acu_output, trans.alu_result);
+            end else begin
+              $display("[SCOREBOARD_AKU] Bład! Niepoprawnie wpisano wartosc do akumulatora, acu: %h, alu_res odczytane takt zegara wczesniej: %h",
+                         trans.acu_output, trans.alu_result);
+            	end
+        	end
+          if(!trans.data_memory_read_enable && !trans.acumulator_ce && !trans.direct_load) begin
+            if(trans.previous_acu == trans.acu_output)
+              $display("[SCOREBOARD_AKU] OK! Wartosc acu nie zmienila sie");
+            else
+              $display("[SCOREBOARD_AKU] Blad! Wartosc acu zmienila sie");
+          end
+        end
+    endtask
+  /*
   task acu_scb;
         transaction trans;
         forever begin
@@ -46,7 +70,7 @@ class scoreboard;
             end
         end
     endtask
-  
+  */
   function bit [7:0] expected_alu_result(transaction trans);
         case (trans.opcode)
             3'b000: return trans.acu_output + trans.o_alu_argument;

@@ -1,3 +1,6 @@
+//`include "tb_transaction.sv"
+//`include "interface.sv"
+
 `include "generator.sv"
 `include "driver.sv"
 `include "monitor.sv"

@@ -45,7 +45,25 @@ class monitor;
     end
 endtask
   
-    task monitor_acu;
+   task monitor_acu;
+    forever begin
+      transaction trans;
+      trans = new();
+      trans.alu_result = alu_unit_interface.MONITOR.monitor_cb.alu_result;
+      trans.data_memory_read_enable = alu_unit_interface.MONITOR.monitor_cb.data_memory_read_enable;
+      trans.acumulator_ce = alu_unit_interface.MONITOR.monitor_cb.acumulator_ce;
+      trans.direct_load = alu_unit_interface.MONITOR.monitor_cb.direct_load;
+      trans.previous_acu = alu_unit_interface.MONITOR.monitor_cb.acu_output;
+      @(posedge alu_unit_interface.MONITOR.clk);
+      trans.acu_output = alu_unit_interface.MONITOR.monitor_cb.acu_output;
+      mon_dut.put(trans);
+      trans_counter++;
+      end
+
+  endtask
+
+  
+    /*task monitor_acu;
     forever begin
       transaction trans;
       trans = new();
@@ -59,7 +77,7 @@ endtask
           	trans_counter++;
             end
        	end
-  endtask
+  endtask*/
 
   
 endclass
