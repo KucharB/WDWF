@@ -52,6 +52,12 @@ class scoreboard;
             else
               $display("[SCOREBOARD_AKU] Blad! Wartosc acu zmienila sie");
           end
+          if(!trans.data_memory_read_enable && trans.acumulator_ce && trans.direct_load) begin
+            if(trans.data_direct == trans.acu_output)
+              $display("[SCOREBOARD_AKU] OK! Wpisano wartosc natychmiastowa");
+            else
+              $display("[SCOREBOARD_AKU] Blad! Nie wpisano wartosc natychmiastowa");
+          end
         end
     endtask
   /*

@@ -54,6 +54,7 @@ endtask
       trans.acumulator_ce = alu_unit_interface.MONITOR.monitor_cb.acumulator_ce;
       trans.direct_load = alu_unit_interface.MONITOR.monitor_cb.direct_load;
       trans.previous_acu = alu_unit_interface.MONITOR.monitor_cb.acu_output;
+      trans.data_direct = alu_unit_interface.MONITOR.monitor_cb.data_direct;
       @(posedge alu_unit_interface.MONITOR.clk);
       trans.acu_output = alu_unit_interface.MONITOR.monitor_cb.acu_output;
       mon_dut.put(trans);
